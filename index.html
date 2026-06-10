@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Historia Mágica 💖</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f7ebe1;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #4a3b32;
+        }
+
+        #game-container {
+            max-width: 600px;
+            width: 100%;
+            background: #ffffff;
+            border: 3px solid #c3a68f;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+
+        /* Zona Visual del Mapa */
+        #map-area {
+            height: 150px;
+            background: linear-gradient(to bottom, #e2f5ff, #dbf0db);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #b5d6b5;
+            margin-bottom: 20px;
+        }
+
+        .forest-background {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40px;
+            background-color: #8cbd8c;
+        }
+
+        /* Personajes en formato Emoji/Texto */
+        .character {
+            position: absolute;
+            bottom: 35px;
+            font-size: 35px;
+            transition: all 1s ease;
+        }
+
+        #duende { left: 10px; }
+        #panda { right: 10px; }
+
+        /* Corazones flotantes */
+        .heart {
+            position: absolute;
+            color: #ff6b81;
+            font-size: 20px;
+            animation: floatUp 1.5s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-80px) scale(1.5); opacity: 0; }
+        }
+
+        /* Cuadro de texto y botones */
+        #text-box {
+            font-size: 16px;
+            line-height: 1.6;
+            min-height: 120px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #faf6f0;
+            border-left: 5px solid #8cbd8c;
+            border-radius: 4px;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button {
+            background-color: #8cbd8c;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #71a671;
+        }
+
+        /* Estilo de la pregunta de seguridad */
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #c3a68f;
+            border-radius: 5px;
+            width: 100px;
+            text-align: center;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="text-align: center; color: #71a671;">✨ Un Mes Juntas ✨</h2>
+
+    <div id="game-container">
+        <!-- Escenario donde se mueven -->
+        <div id="map-area">
+            <div id="duende" class="character">🧝</div>
+            <div id="panda" class="character">🐼</div>
+            <div class="forest-background"></div>
+        </div>
+
+        <!-- Texto de la historia -->
+        <div id="text-box">Loading...</div>
+
+        <!-- Opciones interactivas -->
+        <div id="options-container" class="btn-container"></div>
+    </div>
+
+<script>
+    let currentStep = 0;
+    const duende = document.getElementById('duende');
+    const panda = document.getElementById('panda');
+    const textBox = document.getElementById('text-box');
+    const optionsContainer = document.getElementById('options-container');
+
+    function updateGame() {
+        optionsContainer.innerHTML = ''; 
+
+        switch(currentStep) {
+            case 0:
+                duende.style.left = "10px";
+                panda.style.right = "10px";
+                textBox.innerHTML = "Había una vez, en un bosque encantado, vivía un <b>duende mágico</b> y un <b>panda pragmático</b>. Mediante palomas mensajeras que viajaban de ida y vuelta, una de ellas se desvió e interceptó justo la ventana del duende... Traía una carta anónima del panda hacia sus amigos contando una catástrofe: ¡había un pozo en medio de su casa!";
+                
+                createButton("¿Qué hace el duende? -> Ignorar la carta y seguir haciendo magia", () => {
+                    alert("El destino es muy terco para ser ignorado... ¡Tienes que leerla!");
+                });
+                createButton("¿Qué hace el duende? -> Responder al Panda (Elegir el destino) ✉️", () => {
+                    currentStep = 1;
+                    updateGame();
+                });
+                break;
+
+            case 1:
+                duende.style.left = "60px"; 
+                textBox.innerHTML = "Por esa casualidad o destino, el duende decide responderle. Así comenzaron una hermosa correspondencia por palomas mensajeras. Fue tal la química que nació de este encuentro que, durante meses, se conocieron, conversaron, rieron y planearon el esperado día en que se encontrarían cara a cara.";
+                
+                createButton("Enviar paloma con el último mensaje e ir al encuentro 🕊️", () => {
+                    currentStep = 2;
+                    updateGame();
+                });
+                break;
+
+            case 2:
+                duende.style.left = "120px";
+                textBox.innerHTML = "Para desbloquear el mapa del encuentro físico, el duende debe recordar el inicio de todo... <br><br><b>Pregunta de seguridad: ¿Qué fecha nos conocimos?</b> (Usa formato DD/MM, ej: 18/01):<br><br>";
+                
+                let inputFecha = document.createElement('input');
+                inputFecha.type = 'text';
+                inputFecha.placeholder = "DD/MM";
+                textBox.appendChild(inputFecha);
+
+                createButton("Verificar Fecha 🔑", () => {
+                    let valor = inputFecha.value.trim();
+                    // Validación de la fecha: 18 de enero
+                    if(valor === "18/01" || valor === "18/1") { 
+                        alert("¡Correcto! El destino se activa...");
+                        currentStep = 3;
+                        updateGame();
+                    } else {
+                        alert("Mmm... esa no es la fecha exacta. ¡Inténtalo de nuevo, sé que te acuerdas!");
+                    }
+                });
+                break;
+
+            case 3:
+                duende.style.left = "160px";
+                panda.style.right = "100px"; 
+                textBox.innerHTML = "¡Por fin llegó el día! Ambas estaban muy nerviosas por verse cara a cara. Acordaron un punto en común y asistieron acompañadas de amigos. Al principio hubo una pequeña confusión en la comunicación y los nervios flotaban en el aire... pero por suerte, ¡pudo solucionarse!";
+                
+                createButton("Empezar a caminar juntas por el bosque 🌲", () => {
+                    currentStep = 4;
+                    updateGame();
+                });
+                break;
+
+            case 4:
+                duende.style.left = "210px";
+                panda.style.right = "190px"; 
+                textBox.innerHTML = "Poco a poco, esa comodidad que sentían en las cartas se trasladó a la presencia física. Empezaron las bromas y visitaron una biblioteca en el bosque. De pronto, en un momento cómico, ¡al panda se le caen unos libros! Al agacharse juntas para levantarlos, los nervios del duende se disiparon por completo, mientras el panda se ponía tierno y sonrojado por su torpeza.";
+                
+                createButton("Ayudar al Panda y seguir caminando 📚", () => {
+                    currentStep = 5;
+                    updateGame();
+                });
+                break;
+
+            case 5:
+                duende.innerHTML = "🧝‍♀️"; 
+                panda.innerHTML = "🐼";
+                duende.style.left = "230px";
+                panda.style.right = "230px";
+                textBox.innerHTML = "La confianza floreció. Siguieron recorriendo el lugar con sus amigos a una distancia moderada. Comenzaron los acercamientos, miradas largas llenas de expectativa y una tensión hermosa... un roce de manos que se convirtió en caminar tomadas de la mano. El viento soplaba y el atardecer alumbraba sus rostros en un momento memorable.";
+                
+                createButton("Buscar un lugar más privado en el bosque 🌅", () => {
+                    currentStep = 6;
+                    updateGame();
+                });
+                break;
+
+            case 6:
+                duende.style.left = "240px";
+                panda.style.right = "260px";
+                textBox.innerHTML = "Se apartaron a un lugar privado para intercambiar unos hermosos regalos. El duende, guiando el camino, las llevó a una zona apartada entre los árboles. El panda comprendió que ambas querían lo mismo... El duende tomó la iniciativa, transmitió toda su confianza y valentía al panda, se miraron profundamente e hicieron lo que llevaban meses deseando... ¡Darse su primer y dulce beso! 💋";
+                
+                createButton("❤️ ¡FELIZ PRIMER MES! ❤️", () => {
+                    spawnHearts();
+                });
+                break;
+        }
+    }
+
+    function createButton(text, action) {
+        const btn = document.createElement('button');
+        btn.innerHTML = text;
+        btn.onclick = action;
+        optionsContainer.appendChild(btn);
+    }
+
+    function spawnHearts() {
+        for(let i=0; i<10; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = "❤️";
+                heart.style.left = (230 + Math.random() * 40) + "px";
+                heart.style.bottom = (35 + Math.random() * 30) + "px";
+                document.getElementById('map-area').appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 1500);
+            }, i * 150);
+        }
+    }
+
+    updateGame();
+</script>
+
+</body>
+</html>
