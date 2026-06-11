@@ -186,8 +186,8 @@
     <div id="atmosphere-overlay"></div>
 
     <div id="sprites-container">
-        <img id="sprite-duende" class="avatar" src="duende.jpg" alt="Duende">
-        <img id="sprite-panda" class="avatar" src="panda.jpg" alt="Panda">
+        <img id="sprite-duende" class="avatar" src="duende.jpg.jpeg" alt="Duende">
+        <img id="sprite-panda" class="avatar" src="panda.jpg.jpeg" alt="Panda">
     </div>
 
     <div id="ui-container">
@@ -209,7 +209,7 @@
 
         switch(currentStep) {
             case 0:
-                stage.style.backgroundImage = "url('bosque_casas.jpg')";
+                stage.style.backgroundImage = "url('bosque_casas.jpg.jpeg')";
                 atmosphere.style.background = "rgba(0, 0, 0, 0.05)";
                 
                 duende.style.transform = "translateX(-300px) scale(0.95)";
@@ -246,7 +246,7 @@
                 break;
 
             case 3:
-                stage.style.backgroundImage = "url('bosque_casas.jpg')";
+                stage.style.backgroundImage = "url('bosque_casas.jpg.jpeg')";
                 atmosphere.style.background = "rgba(0, 0, 0, 0)"; 
                 
                 duende.style.transform = "translateX(0px) scale(1)";
@@ -271,7 +271,7 @@
                 break;
 
             case 5:
-                stage.style.backgroundImage = "url('biblioteca.jpg')";
+                stage.style.backgroundImage = "url('biblioteca.jpg.jpeg')";
                 atmosphere.style.background = "rgba(30, 50, 20, 0.1)"; 
                 
                 duende.style.transform = "translateX(60px) scale(1)";
@@ -286,7 +286,7 @@
                 break;
 
             case 6:
-                stage.style.backgroundImage = "url('atardecer.jpg')";
+                stage.style.backgroundImage = "url('atardecer.jpg.jpeg')";
                 atmosphere.style.background = "linear-gradient(to bottom, rgba(255, 90, 0, 0.25), rgba(0, 0, 0, 0.05))"; 
                 
                 duende.style.transform = "translateX(120px) scale(1.05)";
@@ -301,7 +301,7 @@
                 break;
 
             case 7:
-                stage.style.backgroundImage = "url('puente.jpg')";
+                stage.style.backgroundImage = "url('puente.jpg.jpeg')";
                 atmosphere.style.background = "rgba(180, 40, 40, 0.2)"; 
                 
                 duende.style.transform = "translateX(160px) scale(1.08)";
@@ -309,7 +309,7 @@
 
                 textBox.innerHTML = "El duende, conociendo el bosque, la guio hacia un puente de madera apartado sobre un río cantarín, decorado con hermosos faroles. Allí, a solas, intercambiaron los regalos perfectos que traían. El panda lo comprendió todo. El duende, lleno de amor y valentía, tomó la iniciativa, calmó los dulces nervios del panda con su cercanía, se miraron a los ojos y se dieron ese primer, tierno y bellísimo beso que tanto habían deseado. 💋";
                 
-                createButton("✨ Celebrar Nuestros 5 Meses Juntas ✨", () => {
+                createButton("✨ Celebrar Nuestro Primer Mes Juntas ✨", () => {
                     spawnHearts();
                     textBox.innerHTML = "❤️ <b>¡Felices 5 Meses!</b> ❤️<br><br>Que este sea solo el inicio de un pergamino infinito lleno de capítulos maravillosos, risas, complicidad y muchísimo amor. ¡Gracias por hacer este bosque mucho más mágico! 🐼✨🧚";
                 });
@@ -317,6 +317,7 @@
         }
     }
 
+    // El resto de las funciones auxiliares se mantienen igual
     function createButton(text, action) {
         const btn = document.createElement('button');
         btn.innerHTML = text;
