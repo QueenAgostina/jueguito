@@ -5,140 +5,202 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuestra Historia Mágica 💖</title>
     <style>
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #f7ebe1;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #4a3b32;
-        }
-
-        #game-container {
-            max-width: 600px;
-            width: 100%;
-            background: #ffffff;
-            border: 3px solid #c3a68f;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+        * {
             box-sizing: border-box;
         }
-
-        /* Zona Visual del Mapa */
-        #map-area {
-            height: 150px;
-            background: linear-gradient(to bottom, #e2f5ff, #dbf0db);
-            border-radius: 10px;
-            position: relative;
+        
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0b0f12;
+            color: #3a2e2b;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
             overflow: hidden;
-            border: 2px solid #b5d6b5;
-            margin-bottom: 20px;
         }
 
-        .forest-background {
+        /* Contenedor del Escenario con Efecto de Movimiento Cinemático */
+        #stage-container {
             position: absolute;
-            bottom: 0;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 40px;
-            background-color: #8cbd8c;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
         }
 
-        /* Personajes en formato Emoji/Texto */
-        .character {
+        #game-stage {
+            width: 110%;
+            height: 110%;
             position: absolute;
-            bottom: 35px;
-            font-size: 35px;
-            transition: all 1s ease;
+            top: -5%;
+            left: -5%;
+            background-size: cover;
+            background-position: center;
+            animation: cinematicMove 20s ease-in-out infinite alternate;
+            transition: background-image 1.5s ease-in-out;
         }
 
-        #duende { left: 10px; }
-        #panda { right: 10px; }
+        @keyframes cinematicMove {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.04) translate(-1%, 1%); }
+            100% { transform: scale(1.02) translate(1%, -1%); }
+        }
 
-        /* Corazones flotantes */
-        .heart {
+        /* Capa de iluminación ambiental atmosférica */
+        #atmosphere-overlay {
             position: absolute;
-            color: #ff6b81;
-            font-size: 20px;
-            animation: floatUp 1.5s ease-out forwards;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            mix-blend-mode: multiply;
+            transition: background 2.5s ease-in-out;
         }
 
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-80px) scale(1.5); opacity: 0; }
+        /* Contenedor de Personajes (Sprites flotantes) */
+        #sprites-container {
+            position: absolute;
+            bottom: 30%;
+            width: 100%;
+            height: 220px;
+            z-index: 3;
+            pointer-events: none;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 12%;
         }
 
-        /* Cuadro de texto y botones */
+        .avatar {
+            height: 200px;
+            width: auto;
+            border-radius: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.5);
+            transition: all 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Estado inicial: Fuera de la pantalla */
+        #sprite-duende { transform: translateX(-300px); }
+        #sprite-panda { transform: translateX(300px); }
+
+        /* Cuadro de Diálogo Estilo RPG */
+        #ui-container {
+            position: relative;
+            width: 92%;
+            max-width: 750px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.96), rgba(250, 243, 235, 0.96));
+            border: 4px solid #b39274;
+            border-radius: 18px 18px 0 0;
+            padding: 30px;
+            margin: 0 auto;
+            box-shadow: 0px -10px 35px rgba(0,0,0,0.6);
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
         #text-box {
-            font-size: 16px;
-            line-height: 1.6;
-            min-height: 120px;
+            font-size: 17px;
+            line-height: 1.8;
+            min-height: 110px;
             margin-bottom: 20px;
-            padding: 10px;
-            background: #faf6f0;
-            border-left: 5px solid #8cbd8c;
-            border-radius: 4px;
+            color: #2c1e1a;
         }
 
         .btn-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         button {
-            background-color: #8cbd8c;
+            background: linear-gradient(135deg, #8cbd8c, #71a671);
             color: white;
-            border: none;
-            padding: 12px;
-            font-size: 15px;
-            border-radius: 8px;
+            border: 1px solid #5d8f5d;
+            padding: 15px;
+            font-size: 16px;
+            font-family: 'Georgia', serif;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            transition: background 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.2s ease, transform 0.1s;
         }
 
         button:hover {
-            background-color: #71a671;
+            background: linear-gradient(135deg, #71a671, #5d8f5d);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
         }
 
-        /* Estilo de la pregunta de seguridad */
-        input[type="text"] {
-            padding: 10px;
-            font-size: 16px;
+        .trivia-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .trivia-option {
+            background: #ffffff;
+            color: #4a3b32;
             border: 2px solid #c3a68f;
-            border-radius: 5px;
-            width: 100px;
-            text-align: center;
-            margin-right: 10px;
+            text-align: left;
+            padding: 12px 20px;
+            font-size: 15px;
+        }
+
+        .trivia-option:hover {
+            background: #f7ebe1;
+            color: #2c1e1a;
+            border-color: #b39274;
+        }
+
+        /* Corazones finales */
+        .heart {
+            position: absolute;
+            color: #ff526c;
+            font-size: 35px;
+            z-index: 5;
+            animation: floatUp 2.2s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 1; }
+            50% { transform: translateY(-100px) scale(1.2) rotate(15deg); }
+            100% { transform: translateY(-220px) scale(1.8) rotate(-15deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <h2 style="text-align: center; color: #71a671;">✨ Un Mes Juntas ✨</h2>
+    <div id="stage-container">
+        <div id="game-stage"></div>
+    </div>
+    <div id="atmosphere-overlay"></div>
 
-    <div id="game-container">
-        <!-- Escenario donde se mueven -->
-        <div id="map-area">
-            <div id="duende" class="character">🧝</div>
-            <div id="panda" class="character">🐼</div>
-            <div class="forest-background"></div>
-        </div>
+    <div id="sprites-container">
+        <img id="sprite-duende" class="avatar" src="duende.jpg" alt="Duende">
+        <img id="sprite-panda" class="avatar" src="panda.jpg" alt="Panda">
+    </div>
 
-        <!-- Texto de la historia -->
-        <div id="text-box">Loading...</div>
-
-        <!-- Opciones interactivas -->
+    <div id="ui-container">
+        <div id="text-box">Abriendo el pergamino de los recuerdos...</div>
         <div id="options-container" class="btn-container"></div>
     </div>
 
 <script>
     let currentStep = 0;
-    const duende = document.getElementById('duende');
-    const panda = document.getElementById('panda');
+    const stage = document.getElementById('game-stage');
+    const atmosphere = document.getElementById('atmosphere-overlay');
+    const duende = document.getElementById('sprite-duende');
+    const panda = document.getElementById('sprite-panda');
     const textBox = document.getElementById('text-box');
     const optionsContainer = document.getElementById('options-container');
 
@@ -147,93 +209,109 @@
 
         switch(currentStep) {
             case 0:
-                duende.style.left = "10px";
-                panda.style.right = "10px";
-                textBox.innerHTML = "Había una vez, en un bosque encantado, vivía un <b>duende mágico</b> y un <b>panda pragmático</b>. Mediante palomas mensajeras que viajaban de ida y vuelta, una de ellas se desvió e interceptó justo la ventana del duende... Traía una carta anónima del panda hacia sus amigos contando una catástrofe: ¡había un pozo en medio de su casa!";
+                stage.style.backgroundImage = "url('bosque_casas.jpg')";
+                atmosphere.style.background = "rgba(0, 0, 0, 0.05)";
                 
-                createButton("¿Qué hace el duende? -> Ignorar la carta y seguir haciendo magia", () => {
-                    alert("El destino es muy terco para ser ignorado... ¡Tienes que leerla!");
-                });
-                createButton("¿Qué hace el duende? -> Responder al Panda (Elegir el destino) ✉️", () => {
+                duende.style.transform = "translateX(-300px) scale(0.95)";
+                panda.style.transform = "translateX(300px) scale(0.95)";
+
+                textBox.innerHTML = "✨ <b>Capítulo I: El Mensaje Inesperado</b><br><br>Había una vez, en un bosque profundamente encantado, donde un lindo <b>duende mágico</b> vivía en su hogar-hongo y un tierno <b>panda pragmático</b> habitaba su casita de piedra. Sus mundos estaban separados, hasta que una paloma mensajera se desvió de su ruta debido a una catástrofe: ¡un pozo apareció en la casa del panda! La carta llegó por destino directo a la ventana del duende.";
+                
+                createButton("¿Qué decidió hacer el duende al leerla?", () => {
                     currentStep = 1;
                     updateGame();
                 });
                 break;
 
             case 1:
-                duende.style.left = "60px"; 
-                textBox.innerHTML = "Por esa casualidad o destino, el duende decide responderle. Así comenzaron una hermosa correspondencia por palomas mensajeras. Fue tal la química que nació de este encuentro que, durante meses, se conocieron, conversaron, rieron y planearon el esperado día en que se encontrarían cara a cara.";
+                textBox.innerHTML = "El duende no dudó en responder. Así comenzó una correspondencia mágica. Las palomas cruzaban el cielo sin parar. Pasaron los meses, los días soleados dieron paso a noches estrelladas, y el bosque cambió de estación del invierno a la primavera... La química era tan hermosa que decidieron dar el paso más esperado: planear su primer encuentro físico.";
                 
-                createButton("Enviar paloma con el último mensaje e ir al encuentro 🕊️", () => {
+                setTimeout(() => { atmosphere.style.background = "rgba(200, 100, 0, 0.15)"; }, 200); 
+
+                createButton("Viajar a través del tiempo al día señalado 🕊️", () => {
                     currentStep = 2;
                     updateGame();
                 });
                 break;
 
             case 2:
-                duende.style.left = "120px";
-                textBox.innerHTML = "Para desbloquear el mapa del encuentro físico, el duende debe recordar el inicio de todo... <br><br><b>Pregunta de seguridad: ¿Qué fecha nos conocimos?</b> (Usa formato DD/MM, ej: 18/01):<br><br>";
+                atmosphere.style.background = "rgba(40, 30, 80, 0.2)"; 
+                textBox.innerHTML = "🔒 <b>Pregunta del Destino:</b><br>Para abrir el sendero que rompe la distancia, el duende debe recordar el día exacto en que sus caminos se cruzaron por primera vez mediante esas cartas. ¿Qué fecha fue?";
                 
-                let inputFecha = document.createElement('input');
-                inputFecha.type = 'text';
-                inputFecha.placeholder = "DD/MM";
-                textBox.appendChild(inputFecha);
-
-                createButton("Verificar Fecha 🔑", () => {
-                    let valor = inputFecha.value.trim();
-                    // Validación de la fecha: 18 de enero
-                    if(valor === "18/01" || valor === "18/1") { 
-                        alert("¡Correcto! El destino se activa...");
-                        currentStep = 3;
-                        updateGame();
-                    } else {
-                        alert("Mmm... esa no es la fecha exacta. ¡Inténtalo de nuevo, sé que te acuerdas!");
-                    }
-                });
+                createTrivia([
+                    { text: "18 de Febrero del 2026", correct: false, feedback: "¡Nop! Febrero ya era muy tarde..." },
+                    { text: "18 de Enero del 2026", correct: true, feedback: "¡Correcto! El 18 de enero quedó sellado en el destino." },
+                    { text: "01 de Enero del 2026", correct: false, feedback: "¡Cerca, pero aún estábamos celebrando año nuevo!" }
+                ]);
                 break;
 
             case 3:
-                duende.style.left = "160px";
-                panda.style.right = "100px"; 
-                textBox.innerHTML = "¡Por fin llegó el día! Ambas estaban muy nerviosas por verse cara a cara. Acordaron un punto en común y asistieron acompañadas de amigos. Al principio hubo una pequeña confusión en la comunicación y los nervios flotaban en el aire... pero por suerte, ¡pudo solucionarse!";
+                stage.style.backgroundImage = "url('bosque_casas.jpg')";
+                atmosphere.style.background = "rgba(0, 0, 0, 0)"; 
                 
-                createButton("Empezar a caminar juntas por el bosque 🌲", () => {
+                duende.style.transform = "translateX(0px) scale(1)";
+                panda.style.transform = "translateX(0px) scale(1)";
+
+                textBox.innerHTML = "✨ <b>Capítulo II: Cara a Cara</b><br><br>¡Por fin llegó el momento! Ambos se encontraron en un punto intermedio, rodeados de amigos que se mantenían a una distancia moderada. Los nervios eran enormes, e incluso hubo una pequeña confusión inicial en la comunicación... Pero la calidez de sus corazones disipó cualquier duda y empezaron a caminar juntos.";
+                
+                createButton("Acompañarla a explorar el bosque...", () => {
                     currentStep = 4;
                     updateGame();
                 });
                 break;
 
             case 4:
-                duende.style.left = "210px";
-                panda.style.right = "190px"; 
-                textBox.innerHTML = "Poco a poco, esa comodidad que sentían en las cartas se trasladó a la presencia física. Empezaron las bromas y visitaron una biblioteca en el bosque. De pronto, en un momento cómico, ¡al panda se le caen unos libros! Al agacharse juntas para levantarlos, los nervios del duende se disiparon por completo, mientras el panda se ponía tierno y sonrojado por su torpeza.";
+                textBox.innerHTML = "🔒 <b>Pregunta de Memoria:</b><br>¿Te acuerdas de los detalles? Cuando se vieron por primera vez en persona para iniciar esta caminata, ¿quiénes estaban presentes además de ustedes dos?";
                 
-                createButton("Ayudar al Panda y seguir caminando 📚", () => {
-                    currentStep = 5;
-                    updateGame();
-                });
+                createTrivia([
+                    { text: "Fuimos completamente solos desde el primer segundo", correct: false, feedback: "¡Recuerda que llevaban protectores a distancia moderada!" },
+                    { text: "Asistimos acompañadas con amigos para el apoyo moral", correct: true, feedback: "¡Exacto! Los amigos estaban cuidando el momento desde lejos." },
+                    { text: "Solo nos acompañaban las palomas mensajeras", correct: false, feedback: "Las palomas descansaban ese día, ¡había personas reales!" }
+                ]);
                 break;
 
             case 5:
-                duende.innerHTML = "🧝‍♀️"; 
-                panda.innerHTML = "🐼";
-                duende.style.left = "230px";
-                panda.style.right = "230px";
-                textBox.innerHTML = "La confianza floreció. Siguieron recorriendo el lugar con sus amigos a una distancia moderada. Comenzaron los acercamientos, miradas largas llenas de expectativa y una tensión hermosa... un roce de manos que se convirtió en caminar tomadas de la mano. El viento soplaba y el atardecer alumbraba sus rostros en un momento memorable.";
+                stage.style.backgroundImage = "url('biblioteca.jpg')";
+                atmosphere.style.background = "rgba(30, 50, 20, 0.1)"; 
                 
-                createButton("Buscar un lugar más privado en el bosque 🌅", () => {
+                duende.style.transform = "translateX(60px) scale(1)";
+                panda.style.transform = "translateX(-60px) scale(1)";
+
+                textBox.innerHTML = "Caminando, llegaron a una impresionante biblioteca oculta entre flores y árboles del bosque. En medio de las miradas, ¡al panda se le caen unos libros al suelo debido a la emoción! Al agacharse juntas a levantarlos, un cruce de miradas hizo que los nervios del duende desaparecerieran por completo, mientras el panda moría de timidez por su adorable torpeza.";
+                
+                createButton("Sonreír, tomar su mano y seguir paseando 📚", () => {
                     currentStep = 6;
                     updateGame();
                 });
                 break;
 
             case 6:
-                duende.style.left = "240px";
-                panda.style.right = "260px";
-                textBox.innerHTML = "Se apartaron a un lugar privado para intercambiar unos hermosos regalos. El duende, guiando el camino, las llevó a una zona apartada entre los árboles. El panda comprendió que ambas querían lo mismo... El duende tomó la iniciativa, transmitió toda su confianza y valentía al panda, se miraron profundamente e hicieron lo que llevaban meses deseando... ¡Darse su primer y dulce beso! 💋";
+                stage.style.backgroundImage = "url('atardecer.jpg')";
+                atmosphere.style.background = "linear-gradient(to bottom, rgba(255, 90, 0, 0.25), rgba(0, 0, 0, 0.05))"; 
                 
-                createButton("❤️ ¡FELIZ PRIMER MES! ❤️", () => {
+                duende.style.transform = "translateX(120px) scale(1.05)";
+                panda.style.transform = "translateX(-120px) scale(1.05)";
+
+                textBox.innerHTML = "✨ <b>Capítulo III: La Hermosa Tensión</b><br><br>La confianza floreció por completo. Se alejaron un poco más de los amigos. El atardecer empezó a iluminar sus rostros de una forma mágica y el viento soplaba suavemente. Empezó una tensión preciosa: miradas largas, acercamientos continuos, y un dulce roce de manos que terminó con sus dedos entrelazados firmemente.";
+                
+                createButton("Buscar el rincón privado del río para los regalos 🌅", () => {
+                    currentStep = 7;
+                    updateGame();
+                });
+                break;
+
+            case 7:
+                stage.style.backgroundImage = "url('puente.jpg')";
+                atmosphere.style.background = "rgba(180, 40, 40, 0.2)"; 
+                
+                duende.style.transform = "translateX(160px) scale(1.08)";
+                panda.style.transform = "translateX(-160px) scale(1.08)";
+
+                textBox.innerHTML = "El duende, conociendo el bosque, la guio hacia un puente de madera apartado sobre un río cantarín, decorado con hermosos faroles. Allí, a solas, intercambiaron los regalos perfectos que traían. El panda lo comprendió todo. El duende, lleno de amor y valentía, tomó la iniciativa, calmó los dulces nervios del panda con su cercanía, se miraron a los ojos y se dieron ese primer, tierno y bellísimo beso que tanto habían deseado. 💋";
+                
+                createButton("✨ Celebrar Nuestros 5 Meses Juntas ✨", () => {
                     spawnHearts();
+                    textBox.innerHTML = "❤️ <b>¡Felices 5 Meses!</b> ❤️<br><br>Que este sea solo el inicio de un pergamino infinito lleno de capítulos maravillosos, risas, complicidad y muchísimo amor. ¡Gracias por hacer este bosque mucho más mágico! 🐼✨🧚";
                 });
                 break;
         }
@@ -246,17 +324,39 @@
         optionsContainer.appendChild(btn);
     }
 
+    function createTrivia(options) {
+        const triviaContainer = document.createElement('div');
+        triviaContainer.classList.add('trivia-group');
+        
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.classList.add('trivia-option');
+            btn.innerHTML = opt.text;
+            btn.onclick = () => {
+                if(opt.correct) {
+                    alert(opt.feedback);
+                    currentStep++;
+                    updateGame();
+                } else {
+                    alert(opt.feedback + " ¡Inténtalo otra vez!");
+                }
+            };
+            triviaContainer.appendChild(btn);
+        });
+        optionsContainer.appendChild(triviaContainer);
+    }
+
     function spawnHearts() {
-        for(let i=0; i<10; i++) {
+        for(let i=0; i<25; i++) {
             setTimeout(() => {
                 const heart = document.createElement('div');
                 heart.classList.add('heart');
-                heart.innerHTML = "❤️";
-                heart.style.left = (230 + Math.random() * 40) + "px";
-                heart.style.bottom = (35 + Math.random() * 30) + "px";
-                document.getElementById('map-area').appendChild(heart);
+                heart.innerHTML = ["❤️", "💖", "💘", "🌸"][Math.floor(Math.random() * 4)];
+                heart.style.left = (window.innerWidth / 2 - 30 + (Math.random() * 120 - 60)) + "px";
+                heart.style.bottom = (window.innerHeight * 0.38 + (Math.random() * 40)) + "px";
+                document.body.appendChild(heart);
                 
-                setTimeout(() => heart.remove(), 1500);
+                setTimeout(() => heart.remove(), 2200);
             }, i * 150);
         }
     }
